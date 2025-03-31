@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Product Form</title>
+</head>
+<body>
+   <h1>{% if product %}Edit{% else %}Create{% endif %} Product</h1>
+   {% if error %}<p style="color: red;">{{ error }}</p>{% endif %}
+   <form method="post">
+       {% csrf_token %}
+       <input type="text" name="name" placeholder="Product Name" required
+              value="{% if product %}{{ product.name }}{% endif %}">
+       <input type="number" step="0.01" name="weight" placeholder="Weight" required
+              min="0.01" value="{% if product %}{{ product.weight }}{% endif %}">
+       <input type="date" name="production_date" required max="{{ today }}"
+              value="{% if product %}{{ product.production_date|date:'Y-m-d' }}{% endif %}">
+       <button type="submit">Save</button>
+   </form>
+   <a href="{% url 'product_list' %}">Back to Products</a>
+</body>
+</html>
