@@ -16,6 +16,10 @@ def index(request):
     # The 'all()' is implied by default.
     num_authors = Author.objects.count()
 
+    # Question (test)
+    for au in Author.objects.all():
+        print(type(au), au, au.date_of_birth)
+
     context = {
         'num_books': num_books,
         'num_instances': num_instances,
