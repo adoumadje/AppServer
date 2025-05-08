@@ -9,7 +9,7 @@
     <ul>
         {% for product in products %}
             <li>
-                {{ product.name }} - {{ product.weight }} kg - {{ product.production_date }}
+                {{ product.name }} - {{ product.weight }} kg - {{ product.production_date }} - {{ product.category }}
                 <a href="{% url 'product_update' product.id %}">Edit</a>
                 <a href="{% url 'product_delete' product.id %}">Delete</a>
             </li>

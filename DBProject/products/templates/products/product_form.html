@@ -14,6 +14,11 @@
               min="0.01" value="{% if product %}{{ product.weight }}{% endif %}">
        <input type="date" name="production_date" required max="{{ today }}"
               value="{% if product %}{{ product.production_date|date:'Y-m-d' }}{% endif %}">
+       <select name="category">
+           {% for category in categories %}
+               <option value="{{ category.id }}" {% if product.category.id == category.id %}selected{% endif %}>{{ category.name }}</option>
+           {% endfor %}
+        </select>
        <button type="submit">Save</button>
    </form>
    <a href="{% url 'product_list' %}">Back to Products</a>
