@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Gallery</title>
+</head>
+
+<body>
+    <h1>Gallery</h1>
+
+    {% if messages %}
+    {% for message in messages %}
+    <p style="color: green;">{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+
+    <a href="/upload/">Upload New Photo</a>
+    <hr>
+
+    {% for photo in photos %}
+    <div>
+        <h2>{{ photo.title }}</h2><img src="{{ photo.image.url }}" width="300px">
+    </div>
+    {% empty %}
+    <p>No photos yet!</p>
+    {% endfor %}
+</body>
+
+</html>
