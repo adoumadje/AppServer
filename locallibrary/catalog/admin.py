@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
 # Register your models here.
 
@@ -10,6 +11,16 @@ from .models import Author, Genre, Book, BookInstance, Language
 # admin.site.register(BookInstance)
 admin.site.register(Genre)
 admin.site.register(Language)
+# admin.site.register(User, UserAdmin)
+
+
+# Create user and save to the database
+# user = User.objects.create_user('caleb', 'caleb@example.com', 'password')
+
+# Update fields and then save again
+# user.first_name = 'Caleb'
+# user.last_name = 'Adoumadje'
+# user.save()
 
 
 # Define the admin class
@@ -43,5 +54,14 @@ class BookAdmin(admin.ModelAdmin):
 # Register the Admin classes for BookInstance using the decorator
 @admin.register(BookInstance)
 class BookInstanceAdmin(admin.ModelAdmin):
-    list_display = ('book', 'status', 'due_back')
+    list_display = ('book', 'status', 'borrower', 'due_back', 'id')
     list_filter = ('status', 'due_back')
+
+    fieldsets = (
+        (None, {
+            'fields': ('book', 'imprint', 'id')
+        }),
+        ('Availability', {
+            'fields': ('status', 'due_back', 'borrower')
+        }),
+    )
