@@ -37,7 +37,7 @@ def index(request):
     # for au in Author.objects.all():
     #     print(type(au), au, au.date_of_birth)
 
-    session_keys = request.session.keys()
+    # session_keys = request.session.keys()
     session_items = request.session.items()
 
     context = {
@@ -46,7 +46,7 @@ def index(request):
         'num_instances_available': num_instances_available,
         'num_authors': num_authors,
         'num_visits': num_visits,
-        'session_keys': session_keys,
+        # 'session_keys': session_keys,
         'session_items': session_items,
     }
 
