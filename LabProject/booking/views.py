@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
+from .models import Color, Brand, Features
+
 
 # Create your views here.
 
@@ -19,3 +21,18 @@ def register(request):
             return render(request, 'registration/register.html',
                           {'error': 'Username already exists'})
     return render(request, 'registration/register.html')
+
+def add_new_car(request):
+    colors = Color.objects.all()
+    brands = Brand.objects.all()
+    features = Features.objects.all()
+
+    context = {
+        'colors': colors,
+        'brands': brands,
+        'features': features,
+    }
+    if request.method == 'POST':
+        pass
+
+    return render(request, 'forms/add_new_car.html', context=context)

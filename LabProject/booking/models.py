@@ -30,7 +30,7 @@ class Car(models.Model):
     seats = models.PositiveIntegerField()
     image = models.ImageField(upload_to='car_images/') # File support
     available = models.BooleanField(default=True)
-    features = models.ManyToManyField(Features, help_text='Select one or more features for this car')
+    features = models.ManyToManyField(Features, help_text='Select one or more features for this car') # Many-To-Many
 
     def __str__(self):
         return f"{self.brand.name} - {self.model}"

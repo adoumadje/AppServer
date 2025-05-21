@@ -1,0 +1,26 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h2 class="mt-3">Add New Car</h2>
+<form method="post">
+   {% csrf_token %}
+    Brand: <select name="brand">
+            {% for brand in brands %}
+                <option value="{{brand.id}}">{{ brand.name }}</option>
+            {% endfor %}
+         </select> <br><br>
+    Color: <select name="color">
+            {% for color in colors %}
+                <option value="{{color.id}}">{{ color.name }}</option>
+            {% endfor %}
+         </select> <br><br>
+    Features: <select name="features" multiple>
+            {% for color in colors %}
+                <option value="{{color.id}}">{{ color.name }}</option>
+            {% endfor %}
+         </select> <br><br>
+
+   <input type="submit" value="Add New Car">
+</form>
+{% if error %}<p class="text-danger">{{ error }}</p>{% endif %}
+{% endblock %}
