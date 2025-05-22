@@ -4,16 +4,21 @@
 <h2 class="mt-3">Add New Car</h2>
 <form method="post">
    {% csrf_token %}
-    Brand: <select name="brand">
+    Brand: <select name="brand" required>
             {% for brand in brands %}
                 <option value="{{brand.id}}">{{ brand.name }}</option>
             {% endfor %}
          </select> <br><br>
-    Color: <select name="color">
+    Color: <select name="color" required>
             {% for color in colors %}
                 <option value="{{color.id}}">{{ color.name }}</option>
             {% endfor %}
          </select> <br><br>
+    Model: <input type="text" name="model" required> <br><br>
+    Price Per Day: <input type="number" name="price_per_day" required> <br><br>
+    Number Of Seats: <input type="number" name="seats" required> <br><br>
+    Image: <input type="file" accept="image/*" required> <br><br>
+    <input type="checkbox" name="is_available" checked> Available <br><br>
     Features: <select name="features" multiple>
             {% for color in colors %}
                 <option value="{{color.id}}">{{ color.name }}</option>

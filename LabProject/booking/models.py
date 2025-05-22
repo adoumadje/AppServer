@@ -27,9 +27,9 @@ class Car(models.Model):
     color = models.ForeignKey(Color, on_delete=models.SET_NULL, null=True) # Many-To-One
     model = models.CharField(max_length=100)
     price_per_day=models.DecimalField(max_digits=8, decimal_places=2)
-    seats = models.PositiveIntegerField()
+    num_of_seats = models.PositiveIntegerField()
     image = models.ImageField(upload_to='car_images/') # File support
-    available = models.BooleanField(default=True)
+    is_available = models.BooleanField(default=True)
     features = models.ManyToManyField(Features, help_text='Select one or more features for this car') # Many-To-Many
 
     def __str__(self):
