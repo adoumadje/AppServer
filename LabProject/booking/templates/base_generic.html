@@ -19,6 +19,7 @@
         <h3 class="mb-3"><img src="{% static 'images/car_logo.png' %}" alt="" style="width: 100px;"> Car Booking</h3>
         <ul class="sidebar-nav">
           <li class="mb-2"><a href="{% url 'index' %}">Home</a></li>
+          <li class="mb-2"><a href="{% url 'cars' %}">Cars List</a></li>
 
           {% if user.is_authenticated %}
           <li><a href="{% url 'add_new_car' %}">add new car</a></li>

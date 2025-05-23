@@ -2,7 +2,7 @@
 
 {% block content %}
 <h2 class="mt-3">Add New Car</h2>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
    {% csrf_token %}
     Brand: <select name="brand" required>
             {% for brand in brands %}
@@ -16,15 +16,14 @@
          </select> <br><br>
     Model: <input type="text" name="model" required> <br><br>
     Price Per Day: <input type="number" name="price_per_day" required> <br><br>
-    Number Of Seats: <input type="number" name="seats" required> <br><br>
-    Image: <input type="file" accept="image/*" required> <br><br>
+    Number Of Seats: <input type="number" name="num_of_seats" required> <br><br>
+    Image: <input name="car_image" type="file" accept="image/*" required> <br><br>
     <input type="checkbox" name="is_available" checked> Available <br><br>
     Features: <select name="features" multiple>
-            {% for color in colors %}
-                <option value="{{color.id}}">{{ color.name }}</option>
+            {% for feature in features %}
+                <option value="{{feature.id}}">{{ feature.name }}</option>
             {% endfor %}
          </select> <br><br>
-
    <input type="submit" value="Add New Car">
 </form>
 {% if error %}<p class="text-danger">{{ error }}</p>{% endif %}

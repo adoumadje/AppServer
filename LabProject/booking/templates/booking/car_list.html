@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h3 class="my-3">Cars List</h3>
+<div class="flex row">
+    {% for car in car_list %}
+    <div class="col-3 border rounded ">
+        <img src="{{ car.image.url }}" class="w-100">
+        <h4>{{car}}</h4>
+        <a href="">See details</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
