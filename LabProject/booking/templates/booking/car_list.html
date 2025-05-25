@@ -7,7 +7,7 @@
     <div class="col-3 border rounded ">
         <img src="{{ car.image.url }}" class="w-100">
         <h4>{{car}}</h4>
-        <a href="">See details</a>
+        <a href="{{ car.get_absolute_url }}">See details</a>
     </div>
     {% endfor %}
 </div>

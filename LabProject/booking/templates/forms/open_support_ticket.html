@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h3 class="my-3">Open Ticket</h3>
+<form method="post">
+   {% csrf_token %}
+    <label for="subject"><strong>Subject:</strong></label><br>
+    <input type="text" name="subject" id="subject"> <br><br>
+
+   <label for="message"><strong>Message:</strong></label><br>
+    <textarea name="message" id="message"></textarea> <br><br>
+
+   <input type="submit" value="Send Ticket">
+</form>
+{% if error %}<p class="text-danger">{{ error }}</p>{% endif %}
+{% endblock %}

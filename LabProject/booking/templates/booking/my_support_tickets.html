@@ -1,0 +1,25 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h3 class="my-3">My Support Tickets</h3>
+<table class="border border-dark">
+    <thead>
+        <tr>
+            <th class="border border-dark py-1 px-3">Subject</th>
+            <th class="border border-dark py-1 px-3">Message</th>
+            <th class="border border-dark py-1 px-3">Status</th>
+            <th class="border border-dark py-1 px-3">Created At</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ticket in supportticket_list %}
+        <tr>
+            <td class="border border-dark py-1 px-3">{{ticket.subject}}</td>
+            <td class="border border-dark py-1 px-3">{{ticket.message}}</td>
+            <td class="border border-dark py-1 px-3">{{ticket.status}}</td>
+            <td class="border border-dark py-1 px-3">{{ticket.created_at}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

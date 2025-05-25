@@ -1,10 +1,13 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import generic
+from datetime import date, datetime
 
-from .models import Color, Brand, Features, Car
+from .models import Color, Brand, Features, Car, Booking, SupportTicket
 
 
 # Create your views here.
@@ -71,5 +74,103 @@ def add_new_car(request):
 class CarListView(generic.ListView):
     model = Car
 
+    def get_queryset(self):
+        return Car.objects.filter(is_available=True)
+
 class CarDetailView(generic.DetailView):
     model = Car
+
+@login_required
+def book_car(request, pk):
+    car = get_object_or_404(Car, pk=pk)
+
+    error = None
+
+    context = {
+        'car': car,
+        'error': error
+    }
+
+    if request.method == 'POST':
+        user = request.user
+        start_date_str = request.POST['start_date']
+        start_date = datetime.strptime(start_date_str, "%Y-%m-%d").date()
+        end_date_str = request.POST['end_date']
+        end_date = datetime.strptime(end_date_str, "%Y-%m-%d").date()
+        status = 'Pending'
+
+        if start_date < date.today():
+            context['error'] = 'start date can be in the past'
+            return render(request, 'booking/book_car.html', context=context)
+        if end_date < start_date:
+            context['error'] = "end date can't be before start date"
+            return render(request, 'booking/book_car.html', context=context)
+
+        car.is_available = False
+        car.save()
+
+        Booking.objects.create(user=user, car=car, start_date=start_date, end_date=end_date,
+                               status=status)
+        return redirect('my_bookings')
+
+
+    return render(request, 'booking/book_car.html', context=context)
+
+
+class BookingListView(LoginRequiredMixin, generic.ListView):
+    model = Booking
+    template_name = 'booking/my_bookings.html'
+
+    def get_queryset(self):
+        return Booking.objects.filter(user=self.request.user)
+
+@login_required
+def cancel_booking(request, pk):
+    booking = get_object_or_404(Booking, pk=pk)
+    car = booking.car
+    car.is_available = True
+    car.save()
+    booking.status = 'Cancelled'
+    booking.save()
+    return redirect('my_bookings')
+
+@login_required
+def delete_booking(request, pk):
+    booking = get_object_or_404(Booking, pk=pk)
+    if request.method == 'POST':
+        car = booking.car
+        car.is_available = True
+        car.save()
+        booking.delete()
+        return redirect('my_bookings')
+    return render(request, 'booking/delete_booking.html', {'booking': booking})
+
+@login_required
+def open_support_ticket(request):
+    user = request.user
+    if request.method == 'POST':
+        subject = request.POST['subject']
+        message = request.POST['message']
+        status = 'Open'
+        SupportTicket.objects.create(user=user, subject=subject, message=message, status=status)
+        return redirect('my_support_tickets')
+    return render(request, 'forms/open_support_ticket.html')
+
+class SupportTicketListView(LoginRequiredMixin, generic.ListView):
+    model = SupportTicket
+    template_name = 'booking/my_support_tickets.html'
+
+def search_cars(request):
+    results = []
+    if request.method == 'POST':
+        query = request.POST['query']
+        results = Car.objects.filter(
+            Q(model__icontains=query) |
+            Q(brand__name__icontains=query) |
+            Q(color__name__icontains=query) |
+            Q(owner__username__icontains=query)
+        )
+    context = {
+        'results': results,
+    }
+    return render(request, 'forms/search_cars.html', context=context)

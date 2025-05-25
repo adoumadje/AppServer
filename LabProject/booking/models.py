@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
+
 
 # Create your models here.
 
@@ -31,6 +33,9 @@ class Car(models.Model):
     image = models.ImageField(upload_to='car_images/') # File support
     is_available = models.BooleanField(default=True)
     features = models.ManyToManyField(Features, help_text='Select one or more features for this car') # Many-To-Many
+    def get_absolute_url(self):
+        """Returns the url to access a detail record for this car."""
+        return reverse('car-details', args=[str(self.id)])
 
     def __str__(self):
         return f"{self.brand.name} - {self.model}"
@@ -47,7 +52,7 @@ class Booking(models.Model):
     ])
 
     def __str__(self):
-        return f"Booking by {self.user.username} for {self.car} - {self.status}"
+        return f"Booking by {self.user.username} for {self.car}"
 
 
 class SupportTicket(models.Model):
@@ -62,3 +67,4 @@ class SupportTicket(models.Model):
 
     def __str__(self):
         return f"Ticket from {self.user.username} : {self.subject}"
+

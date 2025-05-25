@@ -1,0 +1,10 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h3 class="my-3">Are you sure you want to delete: <br> {{ booking }}?</h3>
+<form class="mb-2" method="post">
+   {% csrf_token %}
+   <button type="submit">Yes, delete</button>
+</form>
+<a href="{% url 'my_bookings' %}">Cancel</a>
+{% endblock %}

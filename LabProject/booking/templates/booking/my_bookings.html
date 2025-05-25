@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h3 class="my-3">My Bookings</h3>
+<div class="flex row">
+    {% for booking in booking_list %}
+    <div class="col-3 border rounded ">
+        <img src="{{ booking.car.image.url }}" class="w-100">
+        <h4>{{booking}}</h4>
+        <p><strong>Start Date:</strong> {{ booking.start_date }}</p>
+        <p><strong>End Date:</strong> {{ booking.end_date }}</p>
+        <p><strong>Status:</strong> {{ booking.status }}</p>
+        
+        {% if booking.status == 'Pending' %}
+        <a href="{% url 'cancel_booking' booking.id %}">Cancel Booking</a> <br>
+        {% endif %}
+        <a href="{% url 'delete_booking' booking.id %}" class="text-danger">Delete Booking</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

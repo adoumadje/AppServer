@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h3 class="my-3">Book {{ car }}</h3>
+<form method="post">
+   {% csrf_token %}
+   Start Date: <input type="date" name="start_date" required> <br><br>
+
+   End Date: <input type="date" name="end_date" required> <br><br>
+
+   <input type="submit" value="Book Car">
+</form>
+{% if error %}<p class="text-danger">{{ error }}</p>{% endif %}
+{% endblock %}
