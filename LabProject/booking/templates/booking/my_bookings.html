@@ -1,21 +1,46 @@
 {% extends "base_generic.html" %}
+{% load static %}
 
 {% block content %}
-<h3 class="my-3">My Bookings</h3>
-<div class="flex row">
-    {% for booking in booking_list %}
-    <div class="col-3 border rounded ">
-        <img src="{{ booking.car.image.url }}" class="w-100">
-        <h4>{{booking}}</h4>
-        <p><strong>Start Date:</strong> {{ booking.start_date }}</p>
-        <p><strong>End Date:</strong> {{ booking.end_date }}</p>
-        <p><strong>Status:</strong> {{ booking.status }}</p>
-        
-        {% if booking.status == 'Pending' %}
-        <a href="{% url 'cancel_booking' booking.id %}">Cancel Booking</a> <br>
-        {% endif %}
-        <a href="{% url 'delete_booking' booking.id %}" class="text-danger">Delete Booking</a>
+<div class="container py-4">
+    <h3 class="mb-4">My Bookings</h3>
+
+    <div class="row g-4">
+        {% for booking in booking_list %}
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="card h-100 shadow-sm">
+                {% if booking.car.image %}
+                    <img src="{{ booking.car.image.url }}" class="card-img-top" alt="{{ booking.car }}">
+                {% else %}
+                    <img src="{% static 'images/default_car.jpg' %}" class="card-img-top" alt="No Image">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ booking }}</h5>
+                    <p><strong>Start:</strong> {{ booking.start_date }}</p>
+                    <p><strong>End:</strong> {{ booking.end_date }}</p>
+                    <p>
+                        <strong>Status:</strong>
+                        {% if booking.status == 'Pending' %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        {% elif booking.status == 'Approved' %}
+                            <span class="badge bg-success">Approved</span>
+                        {% elif booking.status == 'Cancelled' %}
+                            <span class="badge bg-danger">Cancelled</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ booking.status }}</span>
+                        {% endif %}
+                    </p>
+
+                    {% if booking.status == 'Pending' %}
+                    <a href="{% url 'cancel_booking' booking.id %}" class="btn btn-outline-warning btn-sm w-100 mb-2">Cancel Booking</a>
+                    {% endif %}
+                    <a href="{% url 'delete_booking' booking.id %}" class="btn btn-outline-danger btn-sm w-100">Delete Booking</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>You have no bookings.</p>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock %}

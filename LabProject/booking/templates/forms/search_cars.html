@@ -1,22 +1,40 @@
 {% extends "base_generic.html" %}
+{% load static %}
 
 {% block content %}
-<h3 class="my-3">Search Cars</h3>
-<form method="post">
-   {% csrf_token %}
-    <input type="text" name="query" placeholder="Search cars...">
-   <input type="submit" value="Search">
-</form> <br><br>
-<div class="flex row">
-    {% if not results %}
-        <p>No results found.</p>
-    {% endif %}
-    {% for car in results %}
-        <div class="col-3 border rounded ">
-            <img src="{{ car.image.url }}" class="w-100">
-            <h4>{{car}}</h4>
-            <a href="{{ car.get_absolute_url }}">See details</a>
+<div class="container py-4">
+    <h3 class="mb-4">Search Cars</h3>
+
+    <form method="post" class="row g-3 mb-4">
+        {% csrf_token %}
+        <div class="col-md-10">
+            <input type="text" name="query" placeholder="Search cars..." class="form-control" required>
         </div>
-    {% endfor %}
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+    </form>
+
+    {% if not results %}
+        <p class="text-muted">No results found.</p>
+    {% endif %}
+
+    <div class="row g-4">
+        {% for car in results %}
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="card h-100 shadow-sm">
+                {% if car.image %}
+                    <img src="{{ car.image.url }}" class="card-img-top" alt="{{ car }}">
+                {% else %}
+                    <img src="{% static 'images/default_car.jpg' %}" class="card-img-top" alt="No Image">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ car }}</h5>
+                    <a href="{{ car.get_absolute_url }}" class="btn btn-outline-primary btn-sm mt-2">See Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

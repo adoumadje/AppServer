@@ -1,25 +1,43 @@
 {% extends "base_generic.html" %}
+{% load static %}
 
 {% block content %}
-<h3 class="my-3">My Support Tickets</h3>
-<table class="border border-dark">
-    <thead>
-        <tr>
-            <th class="border border-dark py-1 px-3">Subject</th>
-            <th class="border border-dark py-1 px-3">Message</th>
-            <th class="border border-dark py-1 px-3">Status</th>
-            <th class="border border-dark py-1 px-3">Created At</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for ticket in supportticket_list %}
-        <tr>
-            <td class="border border-dark py-1 px-3">{{ticket.subject}}</td>
-            <td class="border border-dark py-1 px-3">{{ticket.message}}</td>
-            <td class="border border-dark py-1 px-3">{{ticket.status}}</td>
-            <td class="border border-dark py-1 px-3">{{ticket.created_at}}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="container py-4">
+    <h3 class="mb-4">My Support Tickets</h3>
+
+    {% if supportticket_list %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Subject</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in supportticket_list %}
+                <tr>
+                    <td>{{ ticket.subject }}</td>
+                    <td>{{ ticket.message }}</td>
+                    <td>
+                        {% if ticket.status == "Open" %}
+                            <span class="badge bg-warning text-dark">Open</span>
+                        {% elif ticket.status == "Closed" %}
+                            <span class="badge bg-success">Closed</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ ticket.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ ticket.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="text-muted">You have no support tickets yet.</p>
+    {% endif %}
+</div>
 {% endblock %}
