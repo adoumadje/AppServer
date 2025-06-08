@@ -1,0 +1,27 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <h3 class="mb-4">My Cars List</h3>
+    <div class="row g-4">
+        {% for car in car_list %}
+        <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="card h-100 shadow-sm">
+                {% if car.image %}
+                    <img src="{{ car.image.url }}" class="card-img-top" alt="{{ car }}">
+                {% else %}
+                    <img src="{% static 'images/default_car.jpg' %}" class="card-img-top" alt="No Image">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ car }}</h5>
+                    <a href="{% url 'edit_my_car' car.id %}" class="btn btn-primary btn-sm mt-2">Edit Car</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No cars available at the moment.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

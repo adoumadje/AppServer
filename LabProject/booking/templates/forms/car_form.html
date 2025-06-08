@@ -7,7 +7,7 @@
         <div class="col-md-8">
             <div class="card shadow-sm border-0">
                 <div class="card-body">
-                    <h2 class="card-title text-center mb-4">Add New Car</h2>
+                    <h2 class="card-title text-center mb-4">{% if car %}Edit{% else %}Add New{% endif %} Car</h2>
 
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -16,7 +16,8 @@
                             <label for="brand" class="form-label">Brand</label>
                             <select name="brand" id="brand" class="form-select" required>
                                 {% for brand in brands %}
-                                    <option value="{{ brand.id }}">{{ brand.name }}</option>
+                                    <option value="{{ brand.id }}"
+                                    {% if car.brand.id == brand.id %}selected{% endif %}>{{ brand.name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -25,29 +26,34 @@
                             <label for="color" class="form-label">Color</label>
                             <select name="color" id="color" class="form-select" required>
                                 {% for color in colors %}
-                                    <option value="{{ color.id }}">{{ color.name }}</option>
+                                    <option value="{{ color.id }}"
+                                    {% if car.color.id == color.id %}selected{% endif %}>{{ color.name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
 
                         <div class="mb-3">
                             <label for="model" class="form-label">Model</label>
-                            <input type="text" name="model" id="model" class="form-control" required>
+                            <input type="text" name="model" id="model" class="form-control" required
+                            value="{% if car %}{{ car.model }}{% endif %}">
                         </div>
 
                         <div class="mb-3">
                             <label for="price_per_day" class="form-label">Price Per Day</label>
-                            <input type="number" name="price_per_day" id="price_per_day" class="form-control" required>
+                            <input type="number" name="price_per_day" id="price_per_day" class="form-control" required
+                            value="{% if car %}{{ car.price_per_day }}{% endif %}">
                         </div>
 
                         <div class="mb-3">
                             <label for="num_of_seats" class="form-label">Number of Seats</label>
-                            <input type="number" name="num_of_seats" id="num_of_seats" class="form-control" required>
+                            <input type="number" name="num_of_seats" id="num_of_seats" class="form-control" required
+                            value="{% if car %}{{ car.num_of_seats }}{% endif %}">
                         </div>
 
                         <div class="mb-3">
                             <label for="car_image" class="form-label">Image</label>
-                            <input type="file" name="car_image" id="car_image" class="form-control" accept="image/*" required>
+                            <input type="file" name="car_image" id="car_image" class="form-control" accept="image/*"
+                                   {% if not car %}required{% endif %}>
                         </div>
 
                         <div class="form-check mb-3">
@@ -59,7 +65,8 @@
                             <label for="features" class="form-label">Features</label>
                             <select name="features" id="features" class="form-select" multiple>
                                 {% for feature in features %}
-                                    <option value="{{ feature.id }}">{{ feature.name }}</option>
+                                    <option value="{{ feature.id }}"
+                                    {% if feature in car.features.all %}selected{% endif %}>{{ feature.name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -68,7 +75,7 @@
                             <div class="alert alert-danger">{{ error }}</div>
                         {% endif %}
 
-                        <button type="submit" class="btn btn-primary w-100">Add New Car</button>
+                        <button type="submit" class="btn btn-primary w-100">{% if car %}Edit{% else %}Add New{% endif %} Car</button>
                     </form>
 
                 </div>

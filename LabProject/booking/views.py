@@ -53,11 +53,11 @@ def add_new_car(request):
 
         image = request.FILES['car_image']
         if(image.size > 2 * 1024 * 1024):
-            return render(request, 'forms/add_new_car.html', context=context)
+            return render(request, 'forms/car_form.html', context=context)
         # File type validation (only JPG and PNG)
         allowed_types = ['image/jpeg', 'image/png']
         if image.content_type not in allowed_types:
-            return render(request, 'forms/add_new_car.html', context=context)
+            return render(request, 'forms/car_form.html', context=context)
 
         is_available = request.POST['is_available'] == 'on'
 
@@ -68,7 +68,7 @@ def add_new_car(request):
         car.features.set(features_ids)
         return redirect('cars')
 
-    return render(request, 'forms/add_new_car.html', context=context)
+    return render(request, 'forms/car_form.html', context=context)
 
 
 class CarListView(generic.ListView):
@@ -76,6 +76,59 @@ class CarListView(generic.ListView):
 
     def get_queryset(self):
         return Car.objects.filter(is_available=True)
+
+class MyCarListView(generic.ListView):
+    model = Car
+    template_name = 'booking/my_cars_list.html'
+    context_object_name = 'car_list'
+    def get_queryset(self):
+        return Car.objects.filter(is_available=True, owner=self.request.user)
+
+@login_required
+def edit_my_car(request, pk):
+    car = get_object_or_404(Car, pk=pk)
+    colors = Color.objects.all()
+    brands = Brand.objects.all()
+    features = Features.objects.all()
+
+    error = None
+
+    context = {
+        'car': car,
+        'colors': colors,
+        'brands': brands,
+        'features': features,
+        'error': error
+    }
+    if request.method == 'POST':
+        car.owner = request.user
+        brand_id = request.POST['brand']
+        car.brand = get_object_or_404(Brand, pk=brand_id)
+        color_id = request.POST['color']
+        car.color = get_object_or_404(Color, pk=color_id)
+        car.modelmodel = request.POST['model']
+        car.price_per_day = request.POST['price_per_day']
+        car.num_of_seats = request.POST['num_of_seats']
+
+        if request.FILES.get('car_image'):
+            image = request.FILES['car_image']
+            if (image.size > 2 * 1024 * 1024):
+                return render(request, 'forms/car_form.html', context=context)
+            # File type validation (only JPG and PNG)
+            allowed_types = ['image/jpeg', 'image/png']
+            if image.content_type not in allowed_types:
+                return render(request, 'forms/car_form.html', context=context)
+            car.image = image
+
+        car.is_available = request.POST['is_available'] == 'on'
+
+        car.save()
+
+        features_ids = request.POST['features']
+        car.features.set(features_ids)
+        return redirect(car.get_absolute_url())
+
+    return render(request, 'forms/car_form.html', context=context)
 
 class CarDetailView(generic.DetailView):
     model = Car
@@ -123,6 +176,34 @@ class BookingListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return Booking.objects.filter(user=self.request.user)
+
+class MyCarsBookingRequestsListView(LoginRequiredMixin, generic.ListView):
+    model = Booking
+    template_name = 'booking/my_cars_booking_requests.html'
+    context_object_name = 'booking_list'
+
+    def get_queryset(self):
+        return Booking.objects.filter(car__owner=self.request.user, status='Pending')
+
+@login_required
+def confirm_booking(request, pk):
+    booking = get_object_or_404(Booking, pk=pk)
+    car = booking.car
+    car.is_available = True
+    car.save()
+    booking.status = 'Confirmed'
+    booking.save()
+    return redirect('my_cars_booking_requests')
+
+@login_required
+def reject_booking(request, pk):
+    booking = get_object_or_404(Booking, pk=pk)
+    car = booking.car
+    car.is_available = True
+    car.save()
+    booking.status = 'Cancelled'
+    booking.save()
+    return redirect('my_cars_booking_requests')
 
 @login_required
 def cancel_booking(request, pk):

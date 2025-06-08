@@ -28,6 +28,8 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'cars' %}">Cars List</a></li>
                 {% if user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'add_new_car' %}">Add Car</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'my_cars_list' %}">My Cars List</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'my_cars_booking_requests' %}">My Cars Booking Requests</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'my_bookings' %}">My Bookings</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'open_support_ticket' %}">Support</a></li>
                     <li class="nav-item mr-3"><a class="nav-link" href="{% url 'my_support_tickets' %}">My Tickets</a></li>
@@ -59,6 +61,8 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'cars' %}">Cars List</a></li>
                 {% if user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'add_new_car' %}">Add Car</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'my_cars_list' %}">My Cars List</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'my_cars_booking_requests' %}">My Cars Booking Requests</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'my_bookings' %}">My Bookings</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'open_support_ticket' %}">Support</a></li>
                     <li class="nav-item mr-3"><a class="nav-link" href="{% url 'my_support_tickets' %}">My Tickets</a></li>

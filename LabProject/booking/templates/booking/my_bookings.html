@@ -22,8 +22,8 @@
                         <strong>Status:</strong>
                         {% if booking.status == 'Pending' %}
                             <span class="badge bg-warning text-dark">Pending</span>
-                        {% elif booking.status == 'Approved' %}
-                            <span class="badge bg-success">Approved</span>
+                        {% elif booking.status == 'Confirmed' %}
+                            <span class="badge bg-success">Confirmed</span>
                         {% elif booking.status == 'Cancelled' %}
                             <span class="badge bg-danger">Cancelled</span>
                         {% else %}

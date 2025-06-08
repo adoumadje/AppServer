@@ -1,0 +1,40 @@
+{% extends "base_generic.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <h3 class="mb-4">My Cars Booking Requests</h3>
+
+    {% if booking_list %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Car</th>
+                    <th>Booker</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in booking_list %}
+                <tr>
+                    <td>{{ booking.car }}</td>
+                    <td>{{ booking.user }}</td>
+                    <td>{{ booking.start_date }}</td>
+                    <td>{{ booking.end_date }}</td>
+                    <td>
+                        <a href="{% url 'confirm_booking' booking.id %}" class="btn btn-success btn-sm me-2">Confirm</a>
+                        <a href="{% url 'reject_booking' booking.id %}" class="btn btn-danger btn-sm">Reject</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="text-muted">You have no pending booking yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
